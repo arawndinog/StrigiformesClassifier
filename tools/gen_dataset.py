@@ -27,5 +27,5 @@ for f in f_list:
         owl_npy = np.append(owl_npy,img_data,axis=0)
         
 print owl_npy.shape
-owl_h5f.create_dataset('img', data=owl_npy)
+owl_h5f.create_dataset('data', data=owl_npy)
 owl_h5f.close()
