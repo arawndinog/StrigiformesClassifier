@@ -4,7 +4,7 @@ import random
 from time import time
 
 import config
-import networks.alexnet as ann
+import networks.vggnet as ann
 
 def main():
     return
