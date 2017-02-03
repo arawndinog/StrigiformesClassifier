@@ -1,6 +1,5 @@
 import tensorflow as tf
 import nn_functions as layer
-import numpy as np
 
 def network(x, choice_tots, use_dropout):
 
