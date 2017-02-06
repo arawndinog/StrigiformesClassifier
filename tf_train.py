@@ -50,7 +50,7 @@ def main():
     x = tf.placeholder(tf.float32, [None, 128,128])
     y = tf.placeholder(tf.int64, [None])
 
-    y_conv, weights, biases = ann.network(x, choice_tots, True)
+    y_conv, neurons = ann.network(x, choice_tots, True)
 
     cost = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(y_conv,y))
     optimizer = tf.train.AdamOptimizer(learning_rate).minimize(cost)
