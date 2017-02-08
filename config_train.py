@@ -11,8 +11,8 @@ session_dir = project_dir + session_id + "/"
 if not os.path.isdir(session_dir):
     os.mkdir(session_dir)
 
-train_f = [""]
-valid_f = [""]
+train_f = ""
+valid_f = ""
 
 ckpt_name = session_id
 

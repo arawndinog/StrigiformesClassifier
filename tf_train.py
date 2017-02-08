@@ -23,17 +23,10 @@ def main():
     learning_rate_decay_rate = config.learning_rate_decay_rate
 
     # train
-    train_data, train_label = retrieve.extract_hdf5(train_f[0])
-    if len(train_f)>1:
-    for train_f_idx in np.arange(1,len(train_f)):
-        train_f_extra = train_f[train_f_idx]
-        if train_f_extra:
-            train_data_new, train_label_new = retrieve.extract_hdf5(train_f_extra)
-            train_data  = np.concatenate((train_data,train_data_new), axis=0)
-            train_label = np.concatenate((train_label,train_label_new), axis=0)
+    train_data, train_label = retrieve.extract_hdf5(train_f)
 
     # validation
-    valid_data, valid_label = retrieve.extract_hdf5(valid_f[0])
+    valid_data, valid_label = retrieve.extract_hdf5(valid_f)
     valid_data = preprocess.gen_data_feed(valid_data)
     
     img_float, img_int = preprocess.show_final_arr(valid_data[0])
