@@ -18,9 +18,8 @@ def main():
     if use_ckpt:
         ckpt = tf.train.get_checkpoint_state(ckpt_dir)
     batch_size = config.batch_size
+    learning_rate = config.learning_rate
     epoch = config.epoch
-    learning_rate_init = config.learning_rate_init
-    learning_rate_decay_rate = config.learning_rate_decay_rate
 
     # train
     train_data, train_label = retrieve.extract_hdf5(train_f)
@@ -56,10 +55,9 @@ def main():
         saver.restore(sess,ckpt_path)
 
     global_iter = 0
-    learning_rate_current = learning_rate_init
     max_acc = 0
     min_err = 0
-    for i in xrange(epoch):
+    for epoch_i in xrange(epoch):
         start_i = 0
 
         # combined = shuffle_list(list(zip(train_data, train_label)))
@@ -71,23 +69,20 @@ def main():
             end_i = start_i + batch_size if (start_i + batch_size) < train_data_len else train_data_len
             mini_batch_datum = shuffled_train_data[start_i:end_i]
             mini_batch_label = shuffled_train_label[start_i:end_i]
-            sess.run(optimizer, feed_dict = {x:mini_batch_datum, y:mini_batch_label, learning_rate: learning_rate_current})
+            sess.run(optimizer, feed_dict = {x:mini_batch_datum, y:mini_batch_label})
             start_i += batch_size
             if global_iter%500 == 0:
                 acc_stat = sess.run(accuracy, feed_dict = {x:valid_data, y:valid_label})
                 err_stat = sess.run(cost, feed_dict = {x:mini_batch_datum, y:mini_batch_label})
 
                 if acc_stat > max_acc or err_stat < min_err:
-                    save_tensors(session_dir, sess, weights, biases, i, global_iter)
+                    save_tensors(session_dir, sess, weights, biases, epoch_i, global_iter)
                     saver.save(sess, ckpt_dir + ckpt_name, global_step=global_iter)
                     max_acc = acc_stat
                     min_err = err_stat
                     print "New max accuracy reached, iteration %d checkpoint saved" % global_iter
 
             global_iter += 1
-
-        if (i >= 1) and (acc_stat <= max_acc or err_stat >= min_err):
-            learning_rate_current *= learning_rate_decay_rate
 
     print "Total time elapsed: %.3f seconds" % (time() - startTime)
     

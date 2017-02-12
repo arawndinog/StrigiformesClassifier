@@ -18,5 +18,5 @@ ckpt_name = session_id
 
 use_ckpt = True
 batch_size = 20
-learning_rate_init = 0.01
-learning_rate_decay_rate = 0.1
+learning_rate = 0.01
+epoch = 1000000
