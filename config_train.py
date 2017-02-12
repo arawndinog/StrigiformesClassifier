@@ -3,7 +3,7 @@ import os
 current_time = datetime.datetime.now().time()
 session_id = "session_" + str(current_time)
 
-project_dir = os.path.expanduser('~') + "/Projects/CASIA/"
+project_dir = os.path.expanduser('~') + "/Projects/"
 train_dataset_dir = project_dir + "Dataset/"
 val_dataset_dir = project_dir + "Dataset/"
 ckpt_dir = project_dir + "Checkpoints/"

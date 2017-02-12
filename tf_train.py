@@ -28,10 +28,6 @@ def main():
     # validation
     valid_data, valid_label = retrieve.extract_hdf5(valid_f)
     valid_data = preprocess.gen_data_feed(valid_data)
-    
-    img_float, img_int = preprocess.show_final_arr(valid_data[0])
-    debug_str = img_float + "\n\n" + img_int + "\n\n"
-    output_debug(debug_str)
 
     train_data_len = len(train_data)
 
@@ -52,7 +48,7 @@ def main():
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     
     sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True))
-    saver = tf.train.Saver(write_version=tf.train.SaverDef.V2, max_to_keep=100)
+    saver = tf.train.Saver(write_version=tf.train.SaverDef.V2, max_to_keep=40)
 
     sess.run(tf.initialize_all_variables())
     if use_ckpt and ckpt:
@@ -66,10 +62,10 @@ def main():
     for i in xrange(epoch):
         start_i = 0
 
-        combined = shuffle_list(list(zip(train_data, train_label)))
-        shuffled_train_data, shuffled_train_label = zip(*combined)
+        # combined = shuffle_list(list(zip(train_data, train_label)))
+        # shuffled_train_data, shuffled_train_label = zip(*combined)
 
-        shuffled_train_data = preprocess.gen_data_feed(shuffled_train_data)
+        # shuffled_train_data = preprocess.gen_data_feed(shuffled_train_data)
 
         while start_i < train_data_len:
             end_i = start_i + batch_size if (start_i + batch_size) < train_data_len else train_data_len
@@ -80,7 +76,6 @@ def main():
             if global_iter%500 == 0:
                 acc_stat = sess.run(accuracy, feed_dict = {x:valid_data, y:valid_label})
                 err_stat = sess.run(cost, feed_dict = {x:mini_batch_datum, y:mini_batch_label})
-                stat_sum = sess.run(merged, feed_dict = {x:valid_data, y:valid_label})
 
                 if acc_stat > max_acc or err_stat < min_err:
                     save_tensors(session_dir, sess, weights, biases, i, global_iter)
@@ -95,18 +90,6 @@ def main():
             learning_rate_current *= learning_rate_decay_rate
 
     print "Total time elapsed: %.3f seconds" % (time() - startTime)
-
-def shuffle_list(list_to_shuff):
-    random.shuffle(list_to_shuff)
-    random.shuffle(list_to_shuff)
-    return list_to_shuff
-
-def output_debug(debug_str):
-    debug_f = open("dump/debug.txt",'w')
-    debug_f.write(debug_str)
-    debug_f.close()
-    return
-
     
 if __name__ == '__main__':
     main()
