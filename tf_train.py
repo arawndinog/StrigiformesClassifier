@@ -3,7 +3,8 @@ import numpy as np
 import random
 from time import time
 
-import config_test as config
+import config_train as config
+import utils.retrieve_hdf5 as retrieve
 import networks.vggnet as ann
 
 def main():
@@ -21,12 +22,8 @@ def main():
     learning_rate = config.learning_rate
     epoch = config.epoch
 
-    # train
     train_data, train_label = retrieve.extract_hdf5(train_f)
-
-    # validation
     valid_data, valid_label = retrieve.extract_hdf5(valid_f)
-    valid_data = preprocess.gen_data_feed(valid_data)
 
     train_data_len = len(train_data)
 
@@ -35,7 +32,7 @@ def main():
 
     startTime = time()
 
-    x = tf.placeholder(tf.float32, [None, 128,128])
+    x = tf.placeholder(tf.float32, [None,128,128,3])
     y = tf.placeholder(tf.int64, [None])
 
     y_conv, neurons = ann.network(x, choice_tots, True)
@@ -60,15 +57,13 @@ def main():
     for epoch_i in xrange(epoch):
         start_i = 0
 
-        # combined = shuffle_list(list(zip(train_data, train_label)))
-        # shuffled_train_data, shuffled_train_label = zip(*combined)
-
-        # shuffled_train_data = preprocess.gen_data_feed(shuffled_train_data)
+        train_f_idx = np.arange(len(train_data))
+        np.random.shuffle(train_f_idx)
 
         while start_i < train_data_len:
             end_i = start_i + batch_size if (start_i + batch_size) < train_data_len else train_data_len
-            mini_batch_datum = shuffled_train_data[start_i:end_i]
-            mini_batch_label = shuffled_train_label[start_i:end_i]
+            mini_batch_datum = train_data[train_f_idx[start_i:end_i]]
+            mini_batch_label = train_label[train_f_idx[start_i:end_i]]
             sess.run(optimizer, feed_dict = {x:mini_batch_datum, y:mini_batch_label})
             start_i += batch_size
             if global_iter%500 == 0:

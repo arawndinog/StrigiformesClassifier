@@ -12,7 +12,7 @@ def network(x, choice_tots, use_dropout):
                 'wc3': tf.Variable(tf.truncated_normal([3, 3, 128, 128], stddev=0.1)),
                 'bc3': tf.Variable(tf.constant(0.1, shape=[128])),
                 #64x64
-                'wc4': tf.Variable(tf.truncated_normal([3, 3, 256, 256], stddev=0.1)),
+                'wc4': tf.Variable(tf.truncated_normal([3, 3, 128, 256], stddev=0.1)),
                 'bc4': tf.Variable(tf.constant(0.1, shape=[256])),
                 'wc5': tf.Variable(tf.truncated_normal([3, 3, 256, 256], stddev=0.1)),
                 'bc5': tf.Variable(tf.constant(0.1, shape=[256])),
@@ -33,7 +33,7 @@ def network(x, choice_tots, use_dropout):
                 'wc12': tf.Variable(tf.truncated_normal([3, 3, 512, 512], stddev=0.1)),
                 'bc12': tf.Variable(tf.constant(0.1, shape=[512])),
                 #8x8
-                'wd1': tf.Variable(tf.truncated_normal([xxx, 4096], stddev=0.1)),
+                'wd1': tf.Variable(tf.truncated_normal([8*8*512, 4096], stddev=0.1)),
                 'bd1': tf.Variable(tf.constant(0.1, shape=[4096])),
                 'wd2': tf.Variable(tf.truncated_normal([4096, 4096], stddev=0.1)),
                 'bd2': tf.Variable(tf.constant(0.1, shape=[4096])),
@@ -41,8 +41,7 @@ def network(x, choice_tots, use_dropout):
                 'bout': tf.Variable(tf.constant(0.1, shape=[choice_tots]))
     }
     
-    x = tf.truediv(x,255.0)
-    x_image = tf.expand_dims(x,3)
+    x_image = tf.truediv(x,255.0)
     #128x128
     conv1 = layer.conv2d(x_image,neurons['wc1'],neurons['bc1'])
     conv1 = tf.nn.relu(conv1)
