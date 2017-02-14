@@ -44,7 +44,7 @@ def main():
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     
     sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True))
-    saver = tf.train.Saver(write_version=tf.train.SaverDef.V2, max_to_keep=40)
+    saver = tf.train.Saver(write_version=tf.train.SaverDef.V2, max_to_keep=10)
 
     sess.run(tf.initialize_all_variables())
     if use_ckpt and ckpt:
@@ -69,9 +69,10 @@ def main():
             if global_iter%500 == 0:
                 acc_stat = sess.run(accuracy, feed_dict = {x:valid_data, y:valid_label})
                 err_stat = sess.run(cost, feed_dict = {x:mini_batch_datum, y:mini_batch_label})
+                print acc_stat
+                print err_stat
 
                 if acc_stat > max_acc or err_stat < min_err:
-                    save_tensors(session_dir, sess, weights, biases, epoch_i, global_iter)
                     saver.save(sess, ckpt_dir + ckpt_name, global_step=global_iter)
                     max_acc = acc_stat
                     min_err = err_stat
