@@ -41,6 +41,7 @@ def network(x, choice_tots, use_dropout):
                 'bout': tf.Variable(tf.constant(0.1, shape=[choice_tots]))
     }
     
+    x = tf.truediv(x,255.0)
     x_image = tf.expand_dims(x,3)
     #128x128
     conv1 = layer.conv2d(x_image,neurons['wc1'],neurons['bc1'])
