@@ -10,7 +10,6 @@ import networks.vggnet as ann
 def main():
     session_id = config.session_id
     ckpt_dir = config.ckpt_dir
-    session_dir = config.session_dir
     train_f = config.train_f
     valid_f = config.valid_f
     ckpt_name = config.ckpt_name
