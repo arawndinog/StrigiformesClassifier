@@ -4,7 +4,7 @@ import numpy as np
 import h5py
 import os
 
-folder_dir = '/home/adrian/Projects/owl_pics/'
+folder_dir = '/home/adrian/Projects/Owls/'
 folder_list = os.listdir(folder_dir)
 owl_npy = []
 owl_npy_label = []
@@ -12,7 +12,7 @@ owl_h5f = h5py.File('owl_dataset.h5', 'w')
 resized_dim = (128,128)
 
 owl_dict = {}
-index_csv = open("/home/adrian/Projects/owl_pics/owl_index.csv")
+index_csv = open("/home/adrian/Projects/StrigiformesClassifier/reference/owl_index.csv")
 while True:
     csv_line = index_csv.readline()
     if not csv_line:
